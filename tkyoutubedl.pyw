@@ -171,6 +171,14 @@ def downloadVideo():
     startDlButton.configure(state=DISABLED)
     settingsButton.configure(state=DISABLED)
     video = YouTube(videoLinkEntry.get())
+    if dlType == "video":
+        video2 = video.streams.filter(only_video=True, res=dlQualityVideo, mime_type="video/"+dlFormatVideo).all()
+        for i in video2:
+            print(i)
+    elif dlType == "audio":
+        audio2 = video.streams.filter(only_audio=True, res=dlQualityAudio, mime_type="audio/"+dlFormatAudio).all()
+        for i in audio2:
+            print(i)
     startDlButton.configure(state=NORMAL)
     settingsButton.configure(state=NORMAL)
 
@@ -184,7 +192,7 @@ linkLabel = StringVar()
 
 videoLinkEntry = Entry(root, textvariable=linkLabel)
 videoLinkEntry.grid(row=0, column=0, sticky=W+E)
-startDlButton = Button(root, text="Download!")
+startDlButton = Button(root, text="Download!", command=downloadVideo)
 startDlButton.grid(row=0, column=1)
 
 dlProgressBar = Progressbar(root, orient=HORIZONTAL, length=300, mode='determinate')
