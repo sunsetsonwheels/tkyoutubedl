@@ -240,6 +240,7 @@ def downloadVideo():
         settingsButton.configure(state=NORMAL)
         videoLinkEntry.configure(state=NORMAL)
         dlProgressBar.stop()
+        root.title("TkYoutubeDl")
         print(str(e))
         messagebox.showerror("TkYoutubeDl Error", "We failed to download your video. Perhaps check your network connection?\n\nError details:\n"+str(e))
 
