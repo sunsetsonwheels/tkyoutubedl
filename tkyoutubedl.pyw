@@ -109,7 +109,7 @@ def settings():
         videoSettingsWindow["bg"] = "white"
         videoSettingsWindow.title("TkYoutubeDl settings")
 
-        videoQualityLabel = Label(videoSettingsWindow, text="Video quality:", font=("Segoe UI", 16))
+        videoQualityLabel = Label(videoSettingsWindow, text="Video quality(<=720p):", font=("Segoe UI", 16))
         videoQualityLabel.grid(row=0, column=0, sticky=W)
         videoQualityEntry = Entry(videoSettingsWindow, textvariable=currentVideoQuality)
         videoQualityEntry.grid(row=1, column=0, sticky=W)
@@ -197,16 +197,21 @@ dlFileSize = 0
 def progress_check(stream = None, chunk = None, file_handle = None, remaining = None):
     global dlFileSize
     dlProgressBar["value"] = dlFileSize - remaining
+    raw_percent = ((dlFileSize - remaining)/dlFileSize)*100
+    round_percent = round(raw_percent)
+    root.title("TkYoutubeDl ("+str(round_percent)+"% Downloaded)")
 
 def downloadVideo():
     dlComplete = False
     global dlFileSize
+    root.title("TkYoutubeDl (Downloading...)")
     try:
         startDlButton.configure(state=DISABLED)
         settingsButton.configure(state=DISABLED)
+        videoLinkEntry.configure(state=DISABLED)
         video = YouTube(videoLinkEntry.get(), on_progress_callback=progress_check)
         if dlType == "video":
-            video2 = video.streams.filter(only_video=True, res=dlQualityVideo, mime_type="video/"+dlFormatVideo, fps=dlFPSVideo).first()
+            video2 = video.streams.filter(res=dlQualityVideo, mime_type="video/"+dlFormatVideo, fps=dlFPSVideo, progressive=True).first()
             if video2 == None:
                 messagebox.showerror("TkYoutubeDl Error", "No videos match your download criteras. Please check your settings.")
             else:
@@ -226,11 +231,14 @@ def downloadVideo():
         dlProgressBar.stop()
         startDlButton.configure(state=NORMAL)
         settingsButton.configure(state=NORMAL)
+        videoLinkEntry.configure(state=NORMAL)
+        root.title("TkYoutubeDl")
         if dlComplete == True:
             messagebox.showinfo("TkYoutubeDl", "Download of '"+video.title+"' completed! The file is saved in '"+defaultFileDir+"'.")
     except Exception as e:
         startDlButton.configure(state=NORMAL)
         settingsButton.configure(state=NORMAL)
+        videoLinkEntry.configure(state=NORMAL)
         dlProgressBar.stop()
         print(str(e))
         messagebox.showerror("TkYoutubeDl Error", "We failed to download your video. Perhaps check your network connection?\n\nError details:\n"+str(e))
