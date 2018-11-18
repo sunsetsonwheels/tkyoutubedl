@@ -8,13 +8,18 @@ from os.path import isfile, abspath
 from os import execl
 from sys import executable, argv, exit
 from pathlib import Path
+from threading import Thread
+
+def start_thread(function):
+    t = Thread(target=function)
+    t.start()
 
 if not isfile("appcfg.yml"):
     createConfig = messagebox.askquestion("TkYoutubeDl Error", "We couldn't find your configuration file. Do you want to create one?")
     if createConfig == "yes":
         try:
             with open("appcfg.yml", 'w') as config_file:
-                config_contents = dict(defaultFileDir = str(Path.home()), dlType = "video", dlQualityVideo = "720p", dlFormatVideo = "mp4", dlQualityAudio = "128kbps", dlFormatAudio = "mp4")
+                config_contents = dict(defaultFileDir = str(Path.home()), dlType = "video", dlQualityVideo = "720p", dlFPSVideo = 30, dlFormatVideo = "mp4", dlQualityAudio = "128kbps", dlFormatAudio = "mp4")
                 dump(config_contents, config_file)
         except:
             messagebox.showerror("TkYoutubeDl error", "Could not make config file. The app will now quit.")
@@ -30,6 +35,7 @@ else:
         defaultFileDir = config_contents["defaultFileDir"]
         dlType = config_contents["dlType"]
         dlQualityVideo = config_contents["dlQualityVideo"]
+        dlFPSVideo = config_contents["dlFPSVideo"]
         dlFormatVideo = config_contents["dlFormatVideo"]
         dlQualityAudio = config_contents["dlQualityAudio"]
         dlFormatAudio = config_contents["dlFormatAudio"]
@@ -43,6 +49,8 @@ def settings():
     dlTypeChoice.set(dlType)
     currentVideoQuality = StringVar()
     currentVideoQuality.set(dlQualityVideo)
+    currentVideoFPS = StringVar()
+    currentVideoFPS.set(dlFPSVideo)
     currentVideoFormat = StringVar()
     currentVideoFormat.set(dlFormatVideo)
     currentAudioQuality = StringVar()
@@ -59,15 +67,17 @@ def settings():
         global defaultFileDir
         global dlType
         global dlQualityVideo
+        global dlFPSVideo
         global dlFormatVideo
         global dlQualityAudio
         global dlFormatAudio
         with open("appcfg.yml", 'w') as config_file:
-            config_contents = dict(defaultFileDir = currentDefaultDir.get(), dlType = dlTypeChoice.get(), dlQualityVideo = currentVideoQuality.get(), dlFormatVideo = currentVideoFormat.get(), dlQualityAudio = currentAudioQuality.get(), dlFormatAudio = currentAudioFormat.get())
+            config_contents = dict(defaultFileDir = currentDefaultDir.get(), dlType = dlTypeChoice.get(), dlQualityVideo = currentVideoQuality.get(), dlFPSVideo = int(currentVideoFPS.get()),dlFormatVideo = currentVideoFormat.get(), dlQualityAudio = currentAudioQuality.get(), dlFormatAudio = currentAudioFormat.get())
             dump(config_contents, config_file)
         defaultFileDir = defualtDirEntry.get()
         dlType = dlTypeChoice.get()
         dlQualityVideo = currentVideoQuality.get()
+        dlFPSVideo = int(currentVideoFPS.get())
         dlFormatVideo = currentVideoFormat.get()
         dlQualityAudio = currentAudioQuality.get()
         dlFormatAudio = currentAudioFormat.get()
@@ -76,15 +86,17 @@ def settings():
         global defaultFileDir
         global dlType
         global dlQualityVideo
+        global dlFPSVideo
         global dlFormatVideo
         global dlQualityAudio
         global dlFormatAudio
         with open("appcfg.yml", 'w') as config_file:
-            config_contents = dict(defaultFileDir = str(Path.home()), dlType = "video", dlQualityVideo = "720p", dlFormatVideo = "mp4", dlQualityAudio = "128kbps", dlFormatAudio = "mp4")
+            config_contents = dict(defaultFileDir = str(Path.home()), dlType = "video", dlQualityVideo = "720p", dlFPSVideo = 30, dlFormatVideo = "mp4", dlQualityAudio = "128kbps", dlFormatAudio = "mp4")
             dump(config_contents, config_file)
         defaultFileDir = str(Path.home())
         dlType = "video"
         dlQualityVideo = "720p"
+        dlFPSVideo = 30
         dlFormatVideo = "mp4"
         dlQualityAudio = "128kbps"
         dlFormatAudio = "mp4"
@@ -96,16 +108,32 @@ def settings():
         videoSettingsWindow.grab_set()
         videoSettingsWindow["bg"] = "white"
         videoSettingsWindow.title("TkYoutubeDl settings")
+
         videoQualityLabel = Label(videoSettingsWindow, text="Video quality:", font=("Segoe UI", 16))
         videoQualityLabel.grid(row=0, column=0, sticky=W)
         videoQualityEntry = Entry(videoSettingsWindow, textvariable=currentVideoQuality)
         videoQualityEntry.grid(row=1, column=0, sticky=W)
+
+        videoFPSLabel = Label(videoSettingsWindow, text="Video FPS:", font=("Segoe UI", 16))
+        videoFPSLabel.grid(row=2, column=0, sticky=W)
+        videoFPS30Radiobutton = Radiobutton(videoSettingsWindow, text="30 FPS", variable=currentVideoFPS, value=30)
+        videoFPS30Radiobutton.grid(row=3, column=0, sticky=W)
+        videoFPS60Radiobutton = Radiobutton(videoSettingsWindow, text="60 FPS", variable=currentVideoFPS, value=60)
+        videoFPS60Radiobutton.grid(row=4, column=0, sticky=W)
+        if currentVideoFPS == 30:
+            videoFPS30Radiobutton.invoke()
+        elif currentVideoFPS == 60:
+            videoFPS60Radiobutton.invoke()
+        else:
+            pass
+
         videoFormatLabel = Label(videoSettingsWindow, text="Video format:", font=("Segoe UI", 16))
-        videoFormatLabel.grid(row=2, column=0, sticky=W)
+        videoFormatLabel.grid(row=5, column=0, sticky=W)
         videoFormatEntry = Entry(videoSettingsWindow, textvariable=currentVideoFormat)
-        videoFormatEntry.grid(row=3, column=0, sticky=W)
+        videoFormatEntry.grid(row=6, column=0, sticky=W)
+
         videoOkButton = Button(videoSettingsWindow, text="Ok", command=lambda: videoSettingsWindow.destroy())
-        videoOkButton.grid(row=4, column=0, sticky=W+E)
+        videoOkButton.grid(row=7, column=0, sticky=W+E)
         videoSettingsWindow.mainloop()
     def audioSettings():
         audioSettingsWindow = Toplevel()
@@ -164,23 +192,48 @@ def settings():
         pass
     settingsWindow.mainloop()
 
+dlFileSize = 0
+
 def progress_check(stream = None, chunk = None, file_handle = None, remaining = None):
-	pass
+    global dlFileSize
+    dlProgressBar["value"] = dlFileSize - remaining
 
 def downloadVideo():
-    startDlButton.configure(state=DISABLED)
-    settingsButton.configure(state=DISABLED)
-    video = YouTube(videoLinkEntry.get())
-    if dlType == "video":
-        video2 = video.streams.filter(only_video=True, res=dlQualityVideo, mime_type="video/"+dlFormatVideo).all()
-        for i in video2:
-            print(i)
-    elif dlType == "audio":
-        audio2 = video.streams.filter(only_audio=True, res=dlQualityAudio, mime_type="audio/"+dlFormatAudio).all()
-        for i in audio2:
-            print(i)
-    startDlButton.configure(state=NORMAL)
-    settingsButton.configure(state=NORMAL)
+    dlComplete = False
+    global dlFileSize
+    try:
+        startDlButton.configure(state=DISABLED)
+        settingsButton.configure(state=DISABLED)
+        video = YouTube(videoLinkEntry.get(), on_progress_callback=progress_check)
+        if dlType == "video":
+            video2 = video.streams.filter(only_video=True, res=dlQualityVideo, mime_type="video/"+dlFormatVideo, fps=dlFPSVideo).first()
+            if video2 == None:
+                messagebox.showerror("TkYoutubeDl Error", "No videos match your download criteras. Please check your settings.")
+            else:
+                dlFileSize = video2.filesize
+                dlProgressBar["maximum"] = dlFileSize
+                video2.download(defaultFileDir)
+                dlComplete = True
+        elif dlType == "audio":
+            audio2 = video.streams.filter(only_audio=True, abr=dlQualityAudio, mime_type="audio/"+dlFormatAudio).first()
+            if audio2 == None:
+                messagebox.showerror("TkYoutubeDl Error", "No videos match your download criteras. Please check your settings.")
+            else:
+                dlFileSize = audio2.filesize
+                dlProgressBar["maximum"] = dlFileSize
+                audio2.download(defaultFileDir)
+                dlComplete = True
+        dlProgressBar.stop()
+        startDlButton.configure(state=NORMAL)
+        settingsButton.configure(state=NORMAL)
+        if dlComplete == True:
+            messagebox.showinfo("TkYoutubeDl", "Download of '"+video.title+"' completed! The file is saved in '"+defaultFileDir+"'.")
+    except Exception as e:
+        startDlButton.configure(state=NORMAL)
+        settingsButton.configure(state=NORMAL)
+        dlProgressBar.stop()
+        print(str(e))
+        messagebox.showerror("TkYoutubeDl Error", "We failed to download your video. Perhaps check your network connection?\n\nError details:\n"+str(e))
 
 root = Tk()
 root.wm_resizable(False, False)
@@ -192,7 +245,7 @@ linkLabel = StringVar()
 
 videoLinkEntry = Entry(root, textvariable=linkLabel)
 videoLinkEntry.grid(row=0, column=0, sticky=W+E)
-startDlButton = Button(root, text="Download!", command=downloadVideo)
+startDlButton = Button(root, text="Download!", command=lambda: start_thread(downloadVideo))
 startDlButton.grid(row=0, column=1)
 
 dlProgressBar = Progressbar(root, orient=HORIZONTAL, length=300, mode='determinate')
