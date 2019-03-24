@@ -2,8 +2,8 @@ from tkinter import Tk, Toplevel, messagebox, Label, StringVar, HORIZONTAL, W, E
 from tkinter.filedialog import askdirectory
 from tkinter.ttk import Button, Progressbar, Entry, Radiobutton
 from pytube import YouTube
-from yaml import dump
-from yaml import safe_load
+from json import loads, dumps
+from localStoragePy import localStorage as lc
 from os.path import isfile, abspath
 from os import execl
 from sys import executable, argv, exit
@@ -14,13 +14,13 @@ def start_thread(function):
     t = Thread(target=function)
     t.start()
 
-if not isfile("appcfg.yml"):
+localStorage = lc("tkyoutubedl.jkelol111.me")
+
+if not localStorage.getItem("config_json"):
     createConfig = messagebox.askquestion("TkYoutubeDl Error", "We couldn't find your configuration file. Do you want to create one?")
     if createConfig == "yes":
         try:
-            with open("appcfg.yml", 'w') as config_file:
-                config_contents = dict(defaultFileDir = str(Path.home()), dlType = "video", dlQualityVideo = "720p", dlFPSVideo = 30, dlFormatVideo = "mp4", dlQualityAudio = "128kbps", dlFormatAudio = "mp4")
-                dump(config_contents, config_file)
+            localStorage.setItem("config_json", '{"defaultFileDir": "'+str(Path.home())+'", "dlType": "video", "dlQualityVideo": "720p", "dlFPSVideo": 30, "dlFormatVideo": "mp4", "dlQualityAudio": "128kbps", "dlFormatAudio": "mp4"}')
         except:
             messagebox.showerror("TkYoutubeDl error", "Could not make config file. The app will now quit.")
             exit()
@@ -30,8 +30,7 @@ if not isfile("appcfg.yml"):
         exit()
 else:
     try:
-        with open("appcfg.yml", 'r') as config_file:
-            config_contents = safe_load(config_file)
+        config_contents = loads(localStorage.getItem("config_json"))
         defaultFileDir = config_contents["defaultFileDir"]
         dlType = config_contents["dlType"]
         dlQualityVideo = config_contents["dlQualityVideo"]
@@ -40,6 +39,7 @@ else:
         dlQualityAudio = config_contents["dlQualityAudio"]
         dlFormatAudio = config_contents["dlFormatAudio"]
     except Exception as e:
+        messagebox.askretrycancel
         print(str(e))
 
 def settings():
@@ -71,9 +71,7 @@ def settings():
         global dlFormatVideo
         global dlQualityAudio
         global dlFormatAudio
-        with open("appcfg.yml", 'w') as config_file:
-            config_contents = dict(defaultFileDir = currentDefaultDir.get(), dlType = dlTypeChoice.get(), dlQualityVideo = currentVideoQuality.get(), dlFPSVideo = int(currentVideoFPS.get()),dlFormatVideo = currentVideoFormat.get(), dlQualityAudio = currentAudioQuality.get(), dlFormatAudio = currentAudioFormat.get())
-            dump(config_contents, config_file)
+        localStorage.setItem("config_json", '{"defaultFileDir": "'+currentDefaultDir.get()+'", "dlType": "'+dlTypeChoice.get()+'", "dlQualityVideo": "'+currentVideoQuality.get()+'", "dlFPSVideo": '+currentVideoFPS.get()+', "dlFormatVideo": "'+currentVideoFormat.get()+'", "dlQualityAudio": "'+currentAudioQuality.get()+'", "dlFormatAudio": "'+currentAudioFormat.get()+'"}')
         defaultFileDir = defualtDirEntry.get()
         dlType = dlTypeChoice.get()
         dlQualityVideo = currentVideoQuality.get()
@@ -90,9 +88,7 @@ def settings():
         global dlFormatVideo
         global dlQualityAudio
         global dlFormatAudio
-        with open("appcfg.yml", 'w') as config_file:
-            config_contents = dict(defaultFileDir = str(Path.home()), dlType = "video", dlQualityVideo = "720p", dlFPSVideo = 30, dlFormatVideo = "mp4", dlQualityAudio = "128kbps", dlFormatAudio = "mp4")
-            dump(config_contents, config_file)
+        localStorage.setItem("config_json", '{"defaultFileDir": "'+str(Path.home())+'", "dlType": "video", "dlQualityVideo": "720p", "dlFPSVideo": 30, "dlFormatVideo": "mp4", "dlQualityAudio": "128kbps", "dlFormatAudio": "mp4"}')
         defaultFileDir = str(Path.home())
         dlType = "video"
         dlQualityVideo = "720p"
