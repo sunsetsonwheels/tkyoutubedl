@@ -16,11 +16,17 @@ def start_thread(function):
 
 localStorage = lc("tkyoutubedl.jkelol111.me")
 
-if not localStorage.getItem("config_json"):
+if not localStorage.getItem("config.json"):
     createConfig = messagebox.askquestion("TkYoutubeDl Error", "We couldn't find your configuration file. Do you want to create one?")
     if createConfig == "yes":
         try:
-            localStorage.setItem("config_json", '{"defaultFileDir": "'+str(Path.home())+'", "dlType": "video", "dlQualityVideo": "720p", "dlFPSVideo": 30, "dlFormatVideo": "mp4", "dlQualityAudio": "128kbps", "dlFormatAudio": "mp4"}')
+            localStorage.setItem("config.json", dumps({"defaultFileDir": str(Path.home()),
+                                                       "dlType": "video",
+                                                       "dlQualityVideo": "720p",
+                                                       "dlFPSVideo": 30,
+                                                       "dlFormatVideo": "mp4",
+                                                       "dlQualityAudio": "128kbps",
+                                                       "dlFormatAudio": "mp4"}))
         except:
             messagebox.showerror("TkYoutubeDl error", "Could not make config file. The app will now quit.")
             exit()
@@ -30,7 +36,7 @@ if not localStorage.getItem("config_json"):
         exit()
 else:
     try:
-        config_contents = loads(localStorage.getItem("config_json"))
+        config_contents = loads(localStorage.getItem("config.json"))
         defaultFileDir = config_contents["defaultFileDir"]
         dlType = config_contents["dlType"]
         dlQualityVideo = config_contents["dlQualityVideo"]
@@ -71,7 +77,7 @@ def settings():
         global dlFormatVideo
         global dlQualityAudio
         global dlFormatAudio
-        localStorage.setItem("config_json", '{"defaultFileDir": "'+currentDefaultDir.get()+'", "dlType": "'+dlTypeChoice.get()+'", "dlQualityVideo": "'+currentVideoQuality.get()+'", "dlFPSVideo": '+currentVideoFPS.get()+', "dlFormatVideo": "'+currentVideoFormat.get()+'", "dlQualityAudio": "'+currentAudioQuality.get()+'", "dlFormatAudio": "'+currentAudioFormat.get()+'"}')
+        localStorage.setItem("config.json", '{"defaultFileDir": "'+currentDefaultDir.get()+'", "dlType": "'+dlTypeChoice.get()+'", "dlQualityVideo": "'+currentVideoQuality.get()+'", "dlFPSVideo": '+currentVideoFPS.get()+', "dlFormatVideo": "'+currentVideoFormat.get()+'", "dlQualityAudio": "'+currentAudioQuality.get()+'", "dlFormatAudio": "'+currentAudioFormat.get()+'"}')
         defaultFileDir = defualtDirEntry.get()
         dlType = dlTypeChoice.get()
         dlQualityVideo = currentVideoQuality.get()
@@ -88,7 +94,13 @@ def settings():
         global dlFormatVideo
         global dlQualityAudio
         global dlFormatAudio
-        localStorage.setItem("config_json", '{"defaultFileDir": "'+str(Path.home())+'", "dlType": "video", "dlQualityVideo": "720p", "dlFPSVideo": 30, "dlFormatVideo": "mp4", "dlQualityAudio": "128kbps", "dlFormatAudio": "mp4"}')
+        localStorage.setItem("config.json", dumps({"defaultFileDir": str(Path.home()),
+                                                   "dlType": "video",
+                                                   "dlQualityVideo": "720p",
+                                                   "dlFPSVideo": 30,
+                                                   "dlFormatVideo": "mp4",
+                                                   "dlQualityAudio": "128kbps",
+                                                   "dlFormatAudio": "mp4"}))
         defaultFileDir = str(Path.home())
         dlType = "video"
         dlQualityVideo = "720p"
