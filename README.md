@@ -4,3 +4,6 @@
 ### The easy way to download YouTube videos
 
 **README creation in progress**
+
+## Credits
+Icons from Icons8

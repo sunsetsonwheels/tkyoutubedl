@@ -3,7 +3,7 @@ from tkinter.filedialog import askdirectory
 from tkinter.ttk import Button, Progressbar, Entry, Radiobutton
 from pytube import YouTube
 from json import loads, dumps
-from localStoragePy import localStorage as lc
+from localStoragePy import localStoragePy
 from os.path import isfile, abspath
 from os import execl
 from sys import executable, argv, exit
@@ -14,7 +14,7 @@ def start_thread(function):
     t = Thread(target=function)
     t.start()
 
-localStorage = lc("tkyoutubedl.jkelol111.me")
+localStorage = localStoragePy("tkyoutubedl.jkelol111.me")
 
 if not localStorage.getItem("config.json"):
     createConfig = messagebox.askquestion("TkYoutubeDl Error", "We couldn't find your configuration file. Do you want to create one?")
@@ -202,7 +202,7 @@ def settings():
 
 dlFileSize = 0
 
-def progress_check(stream = None, chunk = None, file_handle = None, remaining = None):
+def progress_check(stream = None, chunk = None, remaining = None):
     global dlFileSize
     dlProgressBar["value"] = dlFileSize - remaining
     raw_percent = ((dlFileSize - remaining)/dlFileSize)*100
