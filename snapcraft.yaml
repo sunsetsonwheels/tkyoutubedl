@@ -1,0 +1,8 @@
+name: TkYouTubeDl
+version: git
+summary: Simple frontend for PyTube3.
+description: |
+  TkYouTubeDl is a simple app written in Python which uses the PyTube3 library
+  to download videos to your chosen directory.
+base: core18
+confinement: strict
