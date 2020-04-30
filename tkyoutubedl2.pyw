@@ -58,22 +58,22 @@ class TkYouTubeDlSettingsGUI:
         video_settings_frame = tk.LabelFrame(self.toplevel, text='Video downloads', padx=5, pady=5)
         tk.Label(video_settings_frame, text='Video quality: ').grid(row=0, column=0, sticky='w')
         tk.Entry(video_settings_frame, textvariable=self.settings['dl_video_quality']).grid(row=0, column=1, sticky=tk.NSEW)
-        tk.Button(video_settings_frame, text='?').grid(row=0, column=2, sticky=tk.EW)
+        tk.Button(video_settings_frame, text='?', command=lambda: self.open_help('dl_video_quality')).grid(row=0, column=2, sticky=tk.EW)
         tk.Label(video_settings_frame, text='Video FPS: ').grid(row=1, column=0, sticky='w')
         tk.Entry(video_settings_frame, textvariable=self.settings['dl_video_fps']).grid(row=1, column=1, sticky=tk.NSEW)
-        tk.Button(video_settings_frame, text='?').grid(row=1, column=2, sticky=tk.EW)
+        tk.Button(video_settings_frame, text='?', command=lambda: self.open_help('dl_video_fps')).grid(row=1, column=2, sticky=tk.EW)
         tk.Label(video_settings_frame, text='Video format: ').grid(row=2, column=0, sticky='w')
         tk.Entry(video_settings_frame, textvariable=self.settings['dl_video_format']).grid(row=2, column=1, sticky=tk.NSEW)
-        tk.Button(video_settings_frame, text='?').grid(row=2, column=2, sticky=tk.EW)
+        tk.Button(video_settings_frame, text='?', command=lambda: self.open_help('dl_video_format')).grid(row=2, column=2, sticky=tk.EW)
         video_settings_frame.grid(row=1, column=0, sticky=tk.EW, padx=10, pady=5)
 
         audio_settings_frame = tk.LabelFrame(self.toplevel, text='Audio downloads', padx=5, pady=5)
         tk.Label(audio_settings_frame, text='Audio quality: ').grid(row=0, column=0, sticky='w')
         tk.Entry(audio_settings_frame, textvariable=self.settings['dl_audio_quality']).grid(row=0, column=1, sticky=tk.NSEW)
-        tk.Button(audio_settings_frame, text='?').grid(row=0, column=2, sticky=tk.EW)
+        tk.Button(audio_settings_frame, text='?', command=lambda: self.open_help('dl_audio_quality')).grid(row=0, column=2, sticky=tk.EW)
         tk.Label(audio_settings_frame, text='Audio format: ').grid(row=1, column=0, sticky='w')
         tk.Entry(audio_settings_frame, textvariable=self.settings['dl_audio_format']).grid(row=1, column=1, sticky=tk.NSEW)
-        tk.Button(audio_settings_frame, text='?').grid(row=1, column=2, sticky=tk.EW)
+        tk.Button(audio_settings_frame, text='?', command=lambda: self.open_help('dl_audio_format')).grid(row=1, column=2, sticky=tk.EW)
         audio_settings_frame.grid(row=2, column=0, sticky=tk.EW, padx=10, pady=5)
 
         about_settings_frame = tk.LabelFrame(self.toplevel, text='About TkYouTubeDl', padx=5, pady=5)
@@ -81,19 +81,40 @@ class TkYouTubeDlSettingsGUI:
         tk.Label(about_settings_frame, text='A downloader for YouTube videos coded in Python.').grid(row=1, column=0, sticky='w')
         tk.Label(about_settings_frame, text='Uses PyTube for YouTube video downloading.').grid(row=2, column=0, sticky='w')
         report_issue_label = tk.Label(about_settings_frame, text='Report an issue...', fg="blue", cursor="hand2", font=('Helvetica', 11, 'underline'))
-        report_issue_label.bind('<Button-1>', lambda: webbrowser.open('https://github.com/jkelol111/tkyoutubedl/issues/new'))
+        report_issue_label.bind('<Button-1>', lambda e: webbrowser.open('https://github.com/jkelol111/tkyoutubedl/issues/new'))
         report_issue_label.grid(row=3, column=0, sticky='w')
         more_from_me_label = tk.Label(about_settings_frame, text='More from jkelol111...', fg="blue", cursor="hand2", font=('Helvetica', 11, 'underline'))
-        more_from_me_label.bind('<Button-1>', lambda: webbrowser.open('https://github.com/jkelol111'))
+        more_from_me_label.bind('<Button-1>', lambda e: webbrowser.open('https://github.com/jkelol111'))
         more_from_me_label.grid(row=4, column=0, sticky='w')
         display_disclaimer_label = tk.Label(about_settings_frame, text='View disclaimer...', fg="red", cursor="hand2", font=('Helvetica', 11, 'underline'))
-        display_disclaimer_label.bind('<Button-1>', lambda: display_disclaimer(self.toplevel))
+        display_disclaimer_label.bind('<Button-1>', lambda e: display_disclaimer(self.toplevel))
         display_disclaimer_label.grid(row=5, column=0, sticky='w')
         about_settings_frame.grid(row=3, column=0, sticky=tk.EW, padx=10, pady=5)
 
         tk.Button(self.toplevel, text='Clear settings', command=self.clear_settings).grid(row=4, column=0, sticky=tk.EW, padx=10, pady=5)
 
         self.toplevel.mainloop()
+
+    def open_help(self, which):
+        messagebox_title = 'Help: '
+        messagebox_content = 'This setting controls the '
+        if which == 'dl_video_quality':
+            messagebox_title += 'Video quality'
+            messagebox_content += 'quality of the video downloaded.\n\nSome suitable options are:\n-720p (Default)\n-480p\n-360p\n- etc.\n\nAs we have not implemented FFMPEG stiching for DASH files, you are usually restricted to 720p and below.'
+        elif which == 'dl_video_fps':
+            messagebox_title += 'Video FPS'
+            messagebox_content += 'frame rate of the downloaded video.\n\nSome suitable options are:\n-60\n-30 (Default)\n\nThere might be more options available, you may try them.'
+        elif which == 'dl_video_format':
+            messagebox_title += 'Video format'
+            messagebox_content += 'format of the downloaded video.\n\nSome suitable options are:\n-mp4 (Default)\n-webm\n\nThere might be more downloadable formats, you may try them.'
+        elif which == 'dl_audio_quality':
+            messagebox_title += 'Audio quality'
+            messagebox_content += 'quality of the audio downloaded.\n\nSome suitable options are:\n-160kbps\n-128kbps (Default)\n-70kbps\n-50kbps\n\nThere might be more quality options available, you may try them.'
+        elif which == 'dl_audio_format':
+            messagebox_title += 'Audio format'
+            messagebox_content += 'format of the downloaded audio.\n\nSome suitable options are:\n-mp4 (Default)\n-vorbis\n-opus\n\nThere might be more downloadable formats, you may try them.'
+        messagebox.showinfo(messagebox_title, messagebox_content, parent=self.toplevel)
+            
 
     def change_directory(self):
         selected_dir = filedialog.askdirectory(parent=self.toplevel)

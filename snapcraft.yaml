@@ -1,8 +1,20 @@
-name: TkYouTubeDl
-version: git
-summary: Simple frontend for PyTube3.
+name: tkyoutubedl
+version: '1.0'
+summary: OfflineIMAP
 description: |
-  TkYouTubeDl is a simple app written in Python which uses the PyTube3 library
-  to download videos to your chosen directory.
+  OfflineIMAP is software that downloads your email mailbox(es) as local
+  Maildirs. OfflineIMAP will synchronize both sides via IMAP.
+confinement: devmode
 base: core18
-confinement: strict
+
+parts:
+  tkyoutubedl:
+    plugin: python
+    python-version: python3
+    source: https://github.com/jkelol111/tkyoutubedl.git
+    stage-packages:
+      - python-six
+
+apps:
+  tkyoutubedl:
+    command: bin/offlineimap
