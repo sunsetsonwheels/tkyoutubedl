@@ -18,11 +18,11 @@
     "default": {
         "localstoragepy": {
             "hashes": [
-                "sha256:9d47ed659186092dba194d3868b13d1ee18c10f3d8446df63f210c53630c4a9e",
-                "sha256:eefe37a26b202e50d31924ae93e8ff4dad3657875f4f396c6472f574aabb3699"
+                "sha256:2b3cbf54ea8e919d43a6808cb08f0bd32efe6ae0fa1e9c6f67ed41c67b4ecdf1",
+                "sha256:3d15baf851fc5d5e2f381b67fb5c4f04c4c554fd9d2c904673fa596d6ad65ec3"
             ],
             "index": "pypi",
-            "version": "==0.1.7"
+            "version": "==0.2.2"
         },
         "pytube": {
             "hashes": [
