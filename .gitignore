@@ -1,5 +1,6 @@
-
-dist/.DS_Store
+dist
+build
 .DS_Store
-.vscode/settings.json
+.vscode/
 .tkyoutubedl-devenv
+__pycache__

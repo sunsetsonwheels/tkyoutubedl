@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d1c26aeb8bf2f388c7c05151095fccb80c55d24744a78d5a0f1e69c006ab2527"
+            "sha256": "a7b47d6ba8283d446fb82c4515a8e9905278e49c63c21160901ea159220cafbf"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,13 +16,42 @@
         ]
     },
     "default": {
+        "altgraph": {
+            "hashes": [
+                "sha256:1f05a47122542f97028caf78775a095fbe6a2699b5089de8477eb583167d69aa",
+                "sha256:c623e5f3408ca61d4016f23a681b9adb100802ca3e3da5e718915a9e4052cebe"
+            ],
+            "version": "==0.17"
+        },
         "localstoragepy": {
             "hashes": [
-                "sha256:2b3cbf54ea8e919d43a6808cb08f0bd32efe6ae0fa1e9c6f67ed41c67b4ecdf1",
-                "sha256:3d15baf851fc5d5e2f381b67fb5c4f04c4c554fd9d2c904673fa596d6ad65ec3"
+                "sha256:4446afc2df066f2dde33430a0fd9416d86515f798346fc9aa16a11f615f20d7e",
+                "sha256:bcaaf07a5cbaab65c34cc4532a685b2a44243979d089d8d37a9c612ac743c0bf"
             ],
             "index": "pypi",
-            "version": "==0.2.2"
+            "version": "==0.2.3"
+        },
+        "macholib": {
+            "hashes": [
+                "sha256:0c436bc847e7b1d9bda0560351bf76d7caf930fb585a828d13608839ef42c432",
+                "sha256:c500f02867515e6c60a27875b408920d18332ddf96b4035ef03beddd782d4281"
+            ],
+            "markers": "sys_platform == 'darwin'",
+            "version": "==1.14"
+        },
+        "pyinstaller": {
+            "hashes": [
+                "sha256:954ae81de9a4bc096ff02433b3e245b9272fe53f27cac319e71fe7540952bd3d"
+            ],
+            "index": "pypi",
+            "version": "==4.1"
+        },
+        "pyinstaller-hooks-contrib": {
+            "hashes": [
+                "sha256:fa8280b79d8a2b267a2e43ff44f73b3e4a68fc8d205b8d34e8e06c960f7c2fcf",
+                "sha256:fc3290a2ca337d1d58c579c223201360bfe74caed6454eaf5a2550b77dbda45c"
+            ],
+            "version": "==2020.11"
         },
         "pytube": {
             "hashes": [

@@ -14,7 +14,7 @@ def start_thread(function):
     t = Thread(target=function)
     t.start()
 
-localStorage = localStoragePy("tkyoutubedl.jkelol111.me")
+localStorage = localStoragePy("tkyoutubedl.jkelol111.me", "text")
 
 if not localStorage.getItem("config.json"):
     createConfig = messagebox.askquestion("TkYoutubeDl Error", "We couldn't find your configuration file. Do you want to create one?")

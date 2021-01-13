@@ -9,8 +9,8 @@ Download your YouTube with a classic Tkinter UI.
 # Copyright information.
 __author__ = 'jkelol111'
 __copyright__ = '(C) jkelol111 2020-present'
-__license__ = 'Public Domain'
-__version__ = '2.0.0'
+__license__ = 'MIT License'
+__version__ = '2.0.1'
 
 # Import libraries.
 # CHALLENGE: use only default Python 3 libraries (excluding pytube).
@@ -19,7 +19,6 @@ from tkinter import messagebox
 from tkinter import simpledialog
 from tkinter import filedialog
 import tkinter.ttk as ttk
-import os
 import pathlib
 import threading
 import time
@@ -27,7 +26,7 @@ import pytube
 import webbrowser
 from localStoragePy import localStoragePy
 
-localStorage = localStoragePy('tkyoutubedl2.jkelol111.me')
+localStorage = localStoragePy('tkyoutubedl2.jkelol111.me', 'sqlite')
 
 def display_disclaimer(master=None):
     messagebox.showwarning('Obligatory disclaimer', 'By clicking OK, you accept to the following conditions:\n\nThis app is made as an educational project.\nThe author assumes 0 liability from the resources obtained via this app.\n\nPlease respect local laws and copyright. The author assumes no responsibility in any cases of lawful misconduct conducted via this app, you are on your own!', parent=master)
@@ -150,7 +149,6 @@ class TkYouTubeDlMain:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title(f'TkYouTubeDl {__version__}')
-        self.root.geometry('{0}x{1}+0+0'.format(self.root.winfo_screenwidth(), self.root.winfo_screenheight()))
         self.root.rowconfigure(1, weight=1)
         self.root.columnconfigure(0, weight=1)
 
@@ -307,7 +305,6 @@ class TkYouTubeDlMain:
                         elif dl_type == 'audio':
                             content = yt.streams.filter(abr=self.settings['dl_audio_quality'].get(), file_extension=self.settings['dl_audio_format'].get()).first()
                         else:
-                            messagebox.showerror('Download error', f'Download type is invalid ({dl_type})')
                             raise TypeError(f'Download type is invalid ({dl_type})')
                         if content:
                             print(f'{dl_type} is available!')
