@@ -26,19 +26,11 @@
         },
         "pytube": {
             "hashes": [
-                "sha256:6d02bfef04d3aeeb443d1fb13128bb784735c836a797038bc8171b0a38dfb218",
-                "sha256:e81cdaadb8469a884e022d1b6e11fa6ddecb8be67b48f5a2a6e67f544d670a06"
+                "sha256:55df67d864436f8ddad7c91c37f5781793cd7b947be3d6e561282564a18f4d4c",
+                "sha256:d90f50889e0765a7ba819f139f30d5f77486de036b57622851ea148a7ff50baf"
             ],
             "index": "pypi",
-            "version": "==10.5.3"
-        },
-        "typing-extensions": {
-            "hashes": [
-                "sha256:7cb407020f00f7bfc3cb3e7881628838e69d8f3fcab2f64742a5e76b2f841918",
-                "sha256:99d4073b617d30288f569d3f13d2bd7548c3a7e4c8de87db09a9d29bb3a4a60c",
-                "sha256:dafc7639cde7f1b6e1acc0f457842a83e722ccca8eef5270af2d74792619a89f"
-            ],
-            "version": "==3.7.4.3"
+            "version": "==10.9.2"
         }
     },
     "develop": {
@@ -59,17 +51,23 @@
         },
         "pyinstaller": {
             "hashes": [
-                "sha256:f5c0eeb2aa663cce9a5404292c0195011fa500a6501c873a466b2e8cad3c950c"
+                "sha256:0e802c082487719aab6b2a93575819944c008e6e1ba44c7836fc45660a9586c0",
+                "sha256:2cfef29a878fc54040e2287c19ea4bdc667f473b59918fcb51a1e68366ecb814",
+                "sha256:2ef691eeb360073075b6c355535a15dcdedac28d2ecc8448d34bce671ec2dff4",
+                "sha256:4485046ca929e15f6a2db746ce183c14e1fc3c1e8d2102aad8f1403b25d9ebdf",
+                "sha256:af3ef0b9f265a2d3859357a25ab16743fbb6143c89fd7c3570cb84b8d24db0ba",
+                "sha256:b0f13d0a33b9a21659967db65b475c14645b456dc70ba68fa9cebf4bc29ef58e",
+                "sha256:d0b35f885650b9dc69072adf948b608bcb506c5256dd7f0d0967c1f177bb41b1"
             ],
             "index": "pypi",
-            "version": "==4.2"
+            "version": "==4.4"
         },
         "pyinstaller-hooks-contrib": {
             "hashes": [
-                "sha256:27558072021857d89524c42136feaa2ffe4f003f1bdf0278f9b24f6902c1759c",
-                "sha256:892310e6363655838485ee748bf1c5e5cade7963686d9af8650ee218a3e0b031"
+                "sha256:57964f93eb69255c49159ffdf052aae893feed223b0f69773dfd010ca6c569d9",
+                "sha256:7f5d0689b30da3092149fc536a835a94045ac8c9f0e6dfb23ac171890f5ea8f2"
             ],
-            "version": "==2021.1"
+            "version": "==2021.2"
         }
     }
 }
